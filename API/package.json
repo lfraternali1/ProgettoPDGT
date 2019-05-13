@@ -1,0 +1,26 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "description": "TurismoMarche",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lfraternali1/ProgettoPDGT.git"
+  },
+  "author": "Fraternali Lorenzo <l.fraternali1@campus.uniurb.it>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lfraternali1/ProgettoPDGT/issues"
+  },
+  "homepage": "https://github.com/lfraternali1/ProgettoPDGT#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.16.4",
+    "firebase": "^5.11.1",
+    "firebase-admin": "^7.3.0"
+  }
+}
