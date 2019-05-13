@@ -3,7 +3,6 @@ const PORT = process.env.PORT || 3000
 // Definizione delle librerie.
 const express = require("./node_modules/express")
 const app = express()
-
 const body = require("./node_modules/body-parser");
 app.use(body.urlencoded({ extended: false }));
 
@@ -49,6 +48,88 @@ app.get("/POI/:nome", (req, res)=>{
     console.log(snap.val())
     res.send(snap.val())
   })
+})
+
+// POST: aggiunge un nuovo punto di interesse 
+app.post("/POI/aggiungi",(req, res)=>{
+  var poiDaAggiungere =
+  {
+    civico:         req.body.civico == undefined ?
+                    "" : req.body.civico,
+    codIStatComune: req.body.codIStatComune == undefined ?
+                    "" : req.body.codIStatComune,
+    denominazione:  req.body.denominazione == undefined ? 
+                    "" : req.body.denominazione,
+    descTipoIt:     req.body.descTipoIt == undefined ? 
+                    "" : req.body.descTipoIt,
+    didaImmagineIt: req.body.didaImmagineIt == undefined ? 
+                    "" : req.body.didaImmagineIt,
+    email:          req.body.email == undefined ? 
+                    "" : req.body.email,
+    indirizzo:      req.body.indirizzo == undefined ? 
+                    "" : req.body.indirizzo,
+    latitudine:     req.body.latitudine == undefined ? 
+                    "" : req.body.latitudine,
+    longitudine:    req.body.longitudine == undefined ? 
+                    "" : req.body.longitudine,
+    orarioApertura: req.body.orarioApertura == undefined ? 
+                    "" : req.body.orarioApertura,
+    sitoWeb:        req.body.sitoWeb == undefined ? 
+                    "" :  req.body.sitoWeb,
+    telefono:       req.body.telefono == undefined ? 
+                    "" :  req.body.telefono,
+    comune:         req.body.comune == undefined ? 
+                    "" : req.body.comune,
+    patImmagine:    req.body.patImmagine == undefined ? 
+                    "" : req.body.patImmagine,
+    idPOI:          req.body.idPOI 
+  }
+
+  if (poiDaAggiungere.idPOI == null || 
+      poiDaAggiungere.idPOI == undefined)
+  {
+    console.log("ID POI non valido")
+    res.sendStatus(400)
+  }
+  else
+  {
+	db.ref("/POI")
+    .orderByChild("IdPOI")
+	.equalTo(poiDaAggiungere.idPOI)
+	.once("value", snap => {
+      var id = snap.val()
+	  if (id == undefined)
+	  {
+        var nuovoPOI = db.ref("/POI")
+                       .push()
+                       .set({ 
+                         Civico:         poiDaAggiungere.civico,
+                         CodIStatComune: poiDaAggiungere.codIStatComune,
+                         Denominazione:  poiDaAggiungere.denominazione,
+                         DescTipoIt:     poiDaAggiungere.descTipoIt,
+                         DidaImmagineIt: poiDaAggiungere.didaImmagineIt,
+                         Email:          poiDaAggiungere.email,
+                         IdPOI:          poiDaAggiungere.idPOI,
+                         Indirizzo:      poiDaAggiungere.indirizzo,
+                         Latitudine:     poiDaAggiungere.latitudine,
+                         Longitudine:    poiDaAggiungere.longitudine,
+                         OrarioApertura: poiDaAggiungere.orarioApertura,
+                         SitoWeb:        poiDaAggiungere.sitoWeb,
+	                     Telefono:       poiDaAggiungere.telefono,
+                         comune:         poiDaAggiungere.comune,
+                         patImmagine:    poiDaAggiungere.patImmagine})
+	                     console.log("*** Nuovo POI aggiunto al DB ***" +
+	  	  		                     "\nIDPOI:" + poiDaAggiungere.idPOI + 
+                                     "\nNome:"+ poiDaAggiungere.denominazione)
+	                     res.sendStatus(200)
+      }
+	  else
+	  {
+	    console.log("ID POI gia' assegnato")
+                        res.sendStatus(409)
+      }
+    })
+  }
 })
 
 // localhost:PORT
