@@ -24,6 +24,33 @@ admin.initializeApp({
 // indipendentemente dalle regole di sicurezza
 const db = admin.database();
 
+//GET: Prova API
+app.get('/', function (req, res) {
+  res.send("Benvenuto in TurismoMarche!");
+});
+
+// GET: restituisce tutti i POI di un comune
+app.get("/comune/:comune", (req, res)=>{
+  db.ref("/POI")
+  .orderByChild("comune")
+  .equalTo(req.params.comune)
+  .once("value", snap => {
+    console.log(snap.val())
+    res.send(snap.val())
+  })
+})
+
+// GET: restituisce il POI cercato
+app.get("/POI/:nome", (req, res)=>{
+  db.ref("/POI")
+  .orderByChild("Denominazione")
+  .equalTo(req.params.nome)
+  .once("value", snap => {
+    console.log(snap.val())
+    res.send(snap.val())
+  })
+})
+
 // localhost:PORT
 app.listen(PORT, () => {
   console.log("Server in ascolto sulla porta: " + PORT)
