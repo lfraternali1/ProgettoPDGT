@@ -139,9 +139,41 @@ while(1)
 		else if (isset($testo) &&
 				 ($stato[(string)$chat_id] == 2))
 		{
-			
+			// Richiedo i dati usando l'API 
+			$nomePOI = http_request(TURISMO_API."POI/".rawurlencode($testo));
+			if (isset($nomePOI))
+			{	
+				foreach ($nomePOI as $POI)
+				{
+					
+					// Invio un messaggio per POI con le informazioni
+					http_request(TELEGRAM_API."sendPhoto?".
+									  "chat_id=".$chat_id.
+									  "&photo=".urlencode($POI->patImmagine)."");
+					$infoPOI  =  "\n\nNome: "           .$POI->Denominazione;
+					$infoPOI .=  "\n\nDescTipoIt: "     .$POI->DescTipoIt;
+					$infoPOI .=  "\n\nOrario Apertura: ".$POI->OrarioApertura;
+					$infoPOI .=  "\n\nTelefono: "       .$POI->Telefono;
+					$infoPOI .=  "\n\nEmail: "          .$POI->Email;
+					$infoPOI .=  "\n\nSito Web: "       .$POI->SitoWeb;
+					http_request(TELEGRAM_API."sendmessage?chat_id=".$chat_id.
+					   				          "&text=".urlencode($infoPOI)."");
+					http_request(TELEGRAM_API."sendLocation?".
+					  						  "chat_id=".$chat_id.
+											  "&longitude=".$POI->Longitudine.
+											  "&latitude=".$POI->Latitudine."");
+				}
+			}
+			else
+			{
+				// Il poi non esiste
+				$msg = " Il POI: ".$testo." non è presente nel Database";
+				http_request(TELEGRAM_API."sendmessage?chat_id=".$chat_id.
+										  "&text=".urlencode($msg)."");
+			}
 			//Ritorno allo stato 0
 			$stato[(string)$chat_id] = 0;
+
 		}
 		else
 		{
