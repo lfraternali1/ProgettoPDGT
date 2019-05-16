@@ -9,15 +9,27 @@ app.use(body.urlencoded({ extended: false }));
 // Autentificazione con i privilegi di admin
 const admin = require("./node_modules/firebase-admin");
 
+// Inizializza l'app con un account di servizio, concedendogli i privilegi di
+// amministratore
+
+admin.initializeApp({
+  credential: admin.credential.cert({
+    projectId: process.env.FIREBASE_PROJECT_ID,
+    private_key: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'), 
+    client_email: process.env.FIREBASE_CLIENT_EMAIL,
+  }),
+  databaseURL: "https://turismomarche-5a733.firebaseio.com"
+});
+
+/*
 // Recupero la chiave dell'account di servizio dal file JSON
 const serviceAccount = require("./turismomarche-5a733-firebase-adminsdk-kip1e-e758f4f121.json");
 
-// Inizializza l'app con un account di servizio, concedendogli i privilegi di
-// amministratore
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   databaseURL: "https://turismomarche-5a733.firebaseio.com"
 });
+*/
 
 // Come amministratore, l'app ha accesso per leggere e scrivere tutti i dati,
 // indipendentemente dalle regole di sicurezza
@@ -115,7 +127,7 @@ app.post("/POI/aggiungi",(req, res)=>{
                          Longitudine:    poiDaAggiungere.longitudine,
                          OrarioApertura: poiDaAggiungere.orarioApertura,
                          SitoWeb:        poiDaAggiungere.sitoWeb,
-	                     Telefono:       poiDaAggiungere.telefono,
+	                 Telefono:       poiDaAggiungere.telefono,
                          comune:         poiDaAggiungere.comune,
                          patImmagine:    poiDaAggiungere.patImmagine})
 	                     console.log("*** Nuovo POI aggiunto al DB ***" +
