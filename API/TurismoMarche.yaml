@@ -1,0 +1,168 @@
+openapi: 3.0.0
+info:
+  title: TurismoMarche
+  description: API semplice per la ricerca dei luoghi di interesse nella regione Marche
+  contact:
+    email: l.fraternali1@campus.uniurb.it
+  version: 1.0.0
+servers:
+- url: https://virtserver.swaggerhub.com/lfraternali1/TurismoMarche/1.0.0
+  description: SwaggerHub API Auto Mocking
+paths:
+  /:
+    get:
+      summary: ProvaServer
+      description: Restituisce un semplice messaggio di benvenuto
+      responses:
+        200:
+          description: Connessione avvenuta con successo
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Benvenuto in TurismoMarche
+  /comune/{comune}:
+    get:
+      summary: POI di un comune
+      description: Restituisce tutti i POI del comune richiesto
+      parameters:
+      - name: comune
+        in: path
+        description: Comune richiesto
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        200:
+          description: Restituisce le informazioni dei POI del comune cercato
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200'
+  /POI/{nome}:
+    get:
+      summary: POI cercato
+      description: Restituisce le informazioni del POI richiesto
+      parameters:
+      - name: nome
+        in: path
+        description: POI richiesto
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        200:
+          description: Restituisce le informazioni del POI cercato
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200'
+  /POI/aggiungi:
+    post:
+      summary: Aggiunta nuovo POI
+      description: Aggiunta di un nuovo POI con tutte le informazioni riguardanti
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/POI'
+        required: true
+      responses:
+        200:
+          description: POI aggiunto correttamente
+        400:
+          description: POI non aggiunto perché non è stato inserito l'ID del POI
+        409:
+          description: Distributore non aggiunto perché esiste già un POI con l'ID
+            inserito
+components:
+  schemas:
+    POI:
+      type: object
+      properties:
+        Civico:
+          type: string
+          example: "12"
+        CodIStatComune:
+          type: string
+          example: "61048"
+        comune:
+          type: string
+          example: Sant'Angelo in Vado
+        Denominazione:
+          type: string
+          example: Domus del Mito
+        DescTipoIt:
+          type: string
+          example: Scavi archeologici
+        DidaImmagineIt:
+          type: string
+          example: Mosaico di Nettuno
+        Email:
+          type: string
+          example: guidavadese@live.it
+        IdPOI:
+          type: string
+          example: "123"
+        Indirizzo:
+          type: string
+          example: Via Ghibelline
+        Latitudine:
+          type: string
+          example: "12.123"
+        Longitudine:
+          type: string
+          example: "11.123"
+        OrarioApertura:
+          type: string
+          example: ' 8:00-12:00'
+        patImmagine:
+          type: string
+          example: www.domusmito.it/Nettuno.jpg
+        SitoWeb:
+          type: string
+          example: www.domusmito.it
+        Telefono:
+          type: string
+          example: "0722888888"
+    inline_response_200:
+      type: object
+      properties:
+        Civico:
+          type: string
+        CodIStatComune:
+          type: string
+        comune:
+          type: string
+        Denominazione:
+          type: string
+        DescTipoIt:
+          type: string
+        DidaImmagineIt:
+          type: string
+        Email:
+          type: string
+        IdPOI:
+          type: string
+        Indirizzo:
+          type: string
+        Latitudine:
+          type: string
+        Longitudine:
+          type: string
+        OrarioApertura:
+          type: string
+        patImmagine:
+          type: string
+        SitoWeb:
+          type: string
+        Telefono:
+          type: string
+      example: '{"Civico":"12","CodIStatComune":61048,"comune":"Sant''Angelo in Vado","Denominazione":"Domus
+        del Mito","DescTipoIt":"Scavi archeologici","DidaImmagineIt":"Mosaico trionfo
+        di Nettuno ","Email":"guidavadese@live.it","IdPOI":"123","Indirizzo":"Via
+        Ghibelline","Latitudine":12.345,"Longitudine":11.345,"OrarioApertura":"8:00-12:00","patImmagine":"www.domusmito.it/Nettuno.jpg","SitoWeb":"www.domusmito.it","Telefono":"072288888"}'
