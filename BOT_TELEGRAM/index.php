@@ -3,7 +3,6 @@
 /*************************/
 /* Comportamento del BOT */
 /*************************/
-
 require_once(dirname(__FILE__) . '/config.php');
 require_once(dirname(__FILE__) . '/curl-lib.php');
 
@@ -124,13 +123,12 @@ while(true)
 			// Richiedo i dati usando l'API 
 			$comunePOI = http_request(TURISMO_API."comune/".rawurlencode($testo),
 									  "GET");
-			// Controllo che ci siano POI nel comune richiesto
-			$numeroPOI = count(get_object_vars($comunePOI));
-			if ($numeroPOI != 0)
+			if ($comunePOI)
 			{
+				// Controllo che ci siano POI nel comune richiesto
+				$numeroPOI = count(get_object_vars($comunePOI));
 				// Invio messaggio con numero POI
-				$msg = " *** Nel comune di ".$testo." ci sono ".
-					   $numeroPOI." POI. ***";
+				$msg = " *** Nel comune di ".$testo." ci sono 0 POI. ***";
 				http_request(TELEGRAM_API."sendmessage?chat_id=".$chat_id.
 									      "&text=".urlencode($msg),
 										  "GET");
@@ -188,7 +186,7 @@ while(true)
 					}
 					// Invio di un messaggio con le info rigurdanti il POI
 					$infoPOI  =  "\n\nNome: "           .$POI->Denominazione;
-					$infoPOI .=  "\n\nDescrizionet: "   .$POI->DescTipoIt;
+					$infoPOI .=  "\n\nDescrizione: "    .$POI->DescTipoIt;
 					$infoPOI .=  "\n\nOrario Apertura: ".$POI->OrarioApertura;
 					$infoPOI .=  "\n\nTelefono: "       .$POI->Telefono;
 					$infoPOI .=  "\n\nEmail: "          .$POI->Email;
@@ -210,7 +208,7 @@ while(true)
 					{	
 						$msg = "La posizione di ".$testo." non è disponibile. :(\n";
 						http_request(TELEGRAM_API."sendmessage?chat_id=".$chat_id.
-										          "&text=".urlencode($msg,
+										          "&text=".urlencode($msg),
 												  "GET");
 					}
 				}
