@@ -128,7 +128,7 @@ while(true)
 				// Controllo che ci siano POI nel comune richiesto
 				$numeroPOI = count(get_object_vars($comunePOI));
 				// Invio messaggio con numero POI
-				$msg = " *** Nel comune di ".$testo." ci sono 0 POI. ***";
+				$msg = " *** Nel comune di ".$testo." ci sono ".$numeroPOI." POI. ***";
 				http_request(TELEGRAM_API."sendmessage?chat_id=".$chat_id.
 									      "&text=".urlencode($msg),
 										  "GET");
